@@ -17,60 +17,28 @@ body, input, select, label, button {
   font-family: 'HelveticaNeueW23', Arial, sans-serif;
   margin:0; padding:0;
 }
-body {
-  background-color: #F5F5DC; /* خلفية بيج فاتح */
-}
+body { background-color: #F5F5DC; }
 header { background:#8A7230; color:white; text-align:center; padding:15px; }
 header h1 { margin:0; font-size:18px; }
 
-label {
-  display:block;
-  margin:5px 0 2px;
-  font-weight:bold;
-  font-size:12px;
-  text-align:center;
-}
-
+label { display:block; margin:5px 0 2px; font-weight:bold; font-size:12px; text-align:center; }
 input, textarea, select {
-  width:100%;
-  padding:6px;
-  border:1px solid #c2c1c2;
-  border-radius:4px;
-  margin-bottom:5px;
-  box-sizing:border-box;
-  font-size:12px;
-  text-align:center;
-  background-color: white;
+  width:100%; padding:6px; border:1px solid #c2c1c2; border-radius:4px; margin-bottom:5px;
+  box-sizing:border-box; font-size:12px; text-align:center; background-color: white;
 }
-
 button {
-  background:#0c8380;
-  color:white;
-  border:none;
-  padding:12px 0;
-  margin-top:10px;
-  cursor:pointer;
-  border-radius:6px;
-  font-size:16px;
-  font-weight:bold;
-  width:100%;
-  text-align:center;
+  background:#0c8380; color:white; border:none; padding:12px 0; margin-top:10px;
+  cursor:pointer; border-radius:6px; font-size:16px; font-weight:bold; width:100%; text-align:center;
 }
-
+.red-clear-btn {
+  background:red !important; margin-top:5px; font-weight:bold;
+}
 #studentChart { width:100%; height:320px; margin-top:10px; }
-
 .rating-display {
-  display:block; 
-  text-align:center; 
-  margin-top:5px; 
-  font-weight:bold; 
-  color:#d73027; 
-  font-size:16px;
-  background-color:#f9eaea;
-  border-radius:6px;
-  padding:5px;
+  display:block; text-align:center; margin-top:5px; font-weight:bold;
+  color:#d73027; font-size:16px; background-color:#f9eaea;
+  border-radius:6px; padding:5px;
 }
-
 @media print {
   button { display:none; }
   select { display:none; }
@@ -82,26 +50,26 @@ button {
 
 <header><h1>نموذج التواصل مع ولي أمر الطالبة</h1></header>
 
-<div style="max-width:800px; margin:auto; padding:10px;">
+<div style="max-width:800px; margin:auto; padding:10px;" id="formContainer">
 
 <!-- الصف الأول: الإدارة و المدرسة -->
 <div style="display:flex; gap:10px; justify-content:center;">
-  <div><label>إدارة تعليم منطقة</label><input type="text"></div>
-  <div><label>اسم المدرسة</label><input type="text"></div>
+  <div><label>إدارة تعليم منطقة</label><input type="text" id="eduAdmin"></div>
+  <div><label>اسم المدرسة</label><input type="text" id="schoolName"></div>
 </div>
 
 <!-- الصف الثاني: المعلمة والمادة والفصل -->
 <div style="display:flex; gap:10px; justify-content:center;">
-  <div><label>اسم المعلمة</label><input type="text"></div>
-  <div><label>المادة</label><input type="text"></div>
-  <div><label>الفصل الدراسي</label><input type="text"></div>
+  <div><label>اسم المعلمة</label><input type="text" id="teacherName"></div>
+  <div><label>المادة</label><input type="text" id="subject"></div>
+  <div><label>الفصل الدراسي</label><input type="text" id="semester"></div>
 </div>
 
 <!-- الصف الثالث: الطالبة والصف واليوم والتاريخ -->
 <div style="display:flex; gap:10px; justify-content:center;">
-  <div><label>اسم الطالبة</label><input type="text"></div>
-  <div><label>الصف</label><input type="text"></div>
-  <div><label>اليوم</label><input type="text"></div>
+  <div><label>اسم الطالبة</label><input type="text" id="studentName"></div>
+  <div><label>الصف</label><input type="text" id="studentClass"></div>
+  <div><label>اليوم</label><input type="text" id="day"></div>
   <div><label>التاريخ</label><input type="text" id="dateInput"></div>
 </div>
 
@@ -150,17 +118,17 @@ button {
 <input type="text" id="teacherNotes">
 </div>
 
-<!-- الرسم البياني 2D -->
 <h5 style="text-align:center; margin-top:12px;">الرسم البياني لمستوى الطالبة</h5>
 <div id="studentChart"></div>
 
 <!-- الصف السادس: الموجه والمدير -->
 <div style="display:flex; gap:10px; justify-content:center; margin-top:10px;">
   <div><label>الموجهة الطلابية</label><input type="text" id="supervisor"></div>
-  <div><label>مديرة المدرسة</label><input type="text"></div>
+  <div><label>مديرة المدرسة</label><input type="text" id="schoolManager"></div>
 </div>
 
 <button onclick="printPDF()">طباعة PDF</button>
+<button class="red-clear-btn" onclick="clearForm()">حذف البيانات</button>
 
 </div>
 <footer style="text-align: center; font-size: 8pt; font-weight: bold;">
@@ -189,62 +157,83 @@ function updateChartAndInputs(){
 
   const values = [vEdu,vBeh,vAtt];
   const labels = ['مستوى التعليم','مستوى السلوك','مستوى المواظبة'];
-  const texts = [
-    `${ratingText(vEdu)} %${vEdu}`,
-    `${ratingText(vBeh)} %${vBeh}`,
-    `${ratingText(vAtt)} %${vAtt}`
-  ];
+  const texts = [`${ratingText(vEdu)} %${vEdu}`, `${ratingText(vBeh)} %${vBeh}`, `${ratingText(vAtt)} %${vAtt}`];
 
   const trace = {
-    x: labels,
-    y: values,
-    type:'bar',
-    text: texts,
-    textposition:'auto',
-    hoverinfo: 'none',
-    marker: { color:['#56CC8A','#FFBD80','#58A5ED'] },
-    textfont: { family: 'HelveticaNeueW23, Arial, sans-serif', size: 12, color: 'black' }
+    x: labels, y: values, type:'bar', text:texts, textposition:'auto', hoverinfo:'none',
+    marker:{color:['#56CC8A','#FFBD80','#58A5ED']},
+    textfont:{family:'HelveticaNeueW23, Arial, sans-serif', size:12, color:'black'}
   };
-
-  const layout = { margin:{l:40,r:20,b:40,t:40}, yaxis:{title:'النسبة %', range:[0,100]} };
+  const layout={margin:{l:40,r:20,b:40,t:40}, yaxis:{title:'النسبة %', range:[0,100]}};
   Plotly.newPlot('studentChart',[trace],layout,{displayModeBar:false,responsive:true, staticPlot:true});
+
+  saveForm();
 }
 
-// تعيين تاريخ اليوم تلقائيًا بصيغة d-m-y
-window.addEventListener('DOMContentLoaded', (event) => {
-  const today = new Date();
-  const day = String(today.getDate()).padStart(2, '0');
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const year = today.getFullYear();
-  const dateInput = document.getElementById('dateInput');
-  if(dateInput) dateInput.value = `${day}-${month}-${year}`;
+// حقول حفظ البيانات
+const inputs = ['eduAdmin','schoolName','teacherName','subject','semester','studentName','studentClass','day','dateInput','selEdu','selBeh','selAtt','teacherNotes','supervisor','schoolManager'];
+
+// حفظ تلقائي عند التعديل
+inputs.forEach(id=>{
+  const el = document.getElementById(id);
+  el.addEventListener('input', saveForm);
+  el.addEventListener('change', saveForm);
 });
 
-// تهيئة أولية
-updateChartAndInputs();
+// حفظ البيانات في localStorage
+function saveForm(){
+  const data = {};
+  inputs.forEach(id=>{
+    const el = document.getElementById(id);
+    data[id] = el.value;
+  });
+  localStorage.setItem('studentFormData', JSON.stringify(data));
+}
+
+// تحميل البيانات من localStorage
+function loadForm(){
+  const data = JSON.parse(localStorage.getItem('studentFormData')||'{}');
+  inputs.forEach(id=>{
+    const el = document.getElementById(id);
+    if(data[id]) el.value = data[id];
+  });
+  updateChartAndInputs();
+}
+
+// مسح البيانات
+function clearForm(){
+  inputs.forEach(id=>document.getElementById(id).value='');
+  localStorage.removeItem('studentFormData');
+  updateChartAndInputs();
+}
+
+// ضبط تاريخ اليوم تلقائيًا
+window.addEventListener('DOMContentLoaded', ()=>{
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2,'0');
+  const month = String(today.getMonth()+1).padStart(2,'0');
+  const year = today.getFullYear();
+  const dateInput = document.getElementById('dateInput');
+  if(dateInput && !dateInput.value) dateInput.value = `${day}-${month}-${year}`;
+  loadForm();
+});
 
 // طباعة PDF
 function printPDF(){
   const wrapper = document.createElement('div');
-  wrapper.style.width='210mm';
-  wrapper.style.height='296.5mm';
+  wrapper.style.width='210mm'; wrapper.style.height='296.5mm';
   wrapper.style.padding='35mm 10mm 20mm 10mm';
-  wrapper.style.boxSizing='border-box';
-  wrapper.style.overflow='hidden';
+  wrapper.style.boxSizing='border-box'; wrapper.style.overflow='hidden';
   wrapper.style.backgroundImage='url("images/background.png")';
-  wrapper.style.backgroundSize='cover';
-  wrapper.style.backgroundRepeat='no-repeat';
+  wrapper.style.backgroundSize='cover'; wrapper.style.backgroundRepeat='no-repeat';
   wrapper.style.backgroundPosition='center';
 
-  const content = document.querySelector('div[style*="max-width:800px"]').cloneNode(true);
-  content.querySelector('button').remove();
+  const content = document.getElementById('formContainer').cloneNode(true);
+  content.querySelectorAll('button').forEach(b=>b.remove());
 
-  const selects = content.querySelectorAll('select');
-  selects.forEach(sel => sel.remove());
-
-  Plotly.toImage(document.getElementById('studentChart'), {format:'png', width:700, height:350}).then(function(dataUrl){
+  Plotly.toImage(document.getElementById('studentChart'), {format:'png', width:700, height:350}).then(dataUrl=>{
     const img = document.createElement('img');
-    img.src = dataUrl;
+    img.src=dataUrl;
     img.style.width='100%';
     const chartDiv = content.querySelector('#studentChart');
     if(chartDiv) chartDiv.replaceWith(img);
