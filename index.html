@@ -17,7 +17,7 @@ body, input, select, label, button {
   font-family: 'HelveticaNeueW23', Arial, sans-serif;
   margin:0; padding:0;
 }
-body { background-color: #F5F5DC; }
+body { background-color: #EBEBE6; }
 header { background:#8A7230; color:white; text-align:center; padding:15px; }
 header h1 { margin:0; font-size:18px; }
 
@@ -115,6 +115,7 @@ button {
 <!-- الصف الخامس: ملاحظات المعلمة -->
 <div>
 <label>ملاحظات المعلمة</label>
+<input type="text" id="teacherNotes">
 <input type="text" id="teacherNotes">
 </div>
 
@@ -222,7 +223,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
 function printPDF(){
   const wrapper = document.createElement('div');
   wrapper.style.width='210mm'; wrapper.style.height='296.5mm';
-  wrapper.style.padding='35mm 10mm 20mm 10mm';
+  wrapper.style.padding='30mm 10mm 20mm 10mm';
   wrapper.style.boxSizing='border-box'; wrapper.style.overflow='hidden';
   wrapper.style.backgroundImage='url("images/background.png")';
   wrapper.style.backgroundSize='cover'; wrapper.style.backgroundRepeat='no-repeat';
